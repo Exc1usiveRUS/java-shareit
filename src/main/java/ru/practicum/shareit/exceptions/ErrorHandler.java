@@ -28,7 +28,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleEmptyFieldException(EmptyFieldException e) {
+    public ErrorResponse handleEmptyFieldException(IllegalArgumentException e) {
         return new ErrorResponse(e.getMessage());
     }
 
