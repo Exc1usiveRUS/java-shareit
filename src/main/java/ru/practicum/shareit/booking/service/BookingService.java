@@ -33,14 +33,14 @@ public class BookingService {
         User booker = getUser(bookerId);
         Item item = getItem(bookingDto.getItemId());
 
-        if(!item.getAvailable()) {
+        if (!item.getAvailable()) {
             throw new RuntimeException("Предмет уже кем-то забронирован");
         }
 
         List<Booking> bookings = bookingRepository.findAllWithIntersectionDates(bookingDto.getItemId(),
                 Set.of(BookingStatus.APPROVED), bookingDto.getStart(), bookingDto.getEnd());
 
-        if(!bookings.isEmpty()) {
+        if (!bookings.isEmpty()) {
             throw new NotFoundException("Предмет занят в указанные даты");
         }
 

@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long userId, UserDto userDto) {
         User user = UserMapper.toUser(findUser(userId));
 
-        if(userDto.getName() != null) user.setName(userDto.getName());
-        if(userDto.getEmail() != null) user.setEmail(userDto.getEmail());
+        if (userDto.getName() != null) user.setName(userDto.getName());
+        if (userDto.getEmail() != null) user.setEmail(userDto.getEmail());
 
         return UserMapper.toUserDto(userRepository.save(user));
     }
