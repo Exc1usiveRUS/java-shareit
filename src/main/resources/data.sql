@@ -1,8 +1,8 @@
-DELETE FROM users;
-DELETE FROM requests;
-DELETE FROM items;
 DELETE FROM bookings;
 DELETE FROM comments;
+DELETE FROM requests;
+DELETE FROM items;
+DELETE FROM users;
 
 ALTER TABLE users
     ALTER COLUMN id RESTART WITH 1;
