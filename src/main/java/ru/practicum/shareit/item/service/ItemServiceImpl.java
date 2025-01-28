@@ -95,9 +95,15 @@ public class ItemServiceImpl implements ItemService {
 
         items.forEach(item -> item.setComments(comments.getOrDefault(item.getId(), List.of())));
 
-        return items.stream()
+        List<ItemDto> itemDtos = items.stream()
                 .map(ItemMapper::toItemDto)
                 .toList();
+
+        for (ItemDto itemDto : itemDtos) {
+            setLastAndNextBooking(itemDto);
+        }
+
+        return itemDtos;
     }
 
     @Override
@@ -126,7 +132,8 @@ public class ItemServiceImpl implements ItemService {
             }
         }
 
-        throw new RuntimeException("Нельзя оставить комментарий, если не бронировал предмет");
+        throw new RuntimeException("Нельзя оставить комментарий, если не бронировал предмет, " +
+                "или бронирование не подтверждено");
     }
 
     private User findUser(Long userId) {
@@ -138,4 +145,29 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Предмет с таким id не найден"));
     }
+
+    private void setLastAndNextBooking(ItemDto itemDto) {
+        LocalDateTime lastBooking = null;
+        LocalDateTime nextBooking = null;
+
+        LocalDateTime now = LocalDateTime.now();
+        List<Booking> bookings = bookingRepository.findAllByItemIdOrderByStartAsc(itemDto.getId());
+        for (Booking booking : bookings) {
+            if (booking.getStatus() == BookingStatus.REJECTED) {
+                return;
+            }
+            if (booking.getEnd().isBefore(now)) {
+                lastBooking = booking.getStart();
+            }
+
+            if (booking.getStart().isAfter(now)) {
+                nextBooking = booking.getEnd();
+                break;
+            }
+        }
+
+        itemDto.setLastBooking(lastBooking);
+        itemDto.setNextBooking(nextBooking);
+    }
+
 }
