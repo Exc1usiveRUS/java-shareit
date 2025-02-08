@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -47,7 +46,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         List<Long> itemRequestIds = itemRequestDtos.stream()
                 .map(ItemRequestDto::getId)
                 .toList();
-        Map<Long, List<Item>> itemsMap = itemRepository.findAllByRequest_IdIn(itemRequestIds)
+        Map<Long, List<Item>> itemsMap = itemRepository.findAllByRequestIdIn(itemRequestIds)
                 .stream()
                 .collect(Collectors.groupingBy(o -> o.getRequest().getId()));
 
