@@ -129,21 +129,6 @@ public class ItemServiceImpl implements ItemService {
                 .toList();
     }
 
-/*    @Transactional
-    public CommentDto addComment(long authorId, long itemId, String text) {
-        User author = findUser(authorId);
-        Item item = findItem(itemId);
-        List<Booking> bookings = bookingRepository.findAllByItemIdAndBookerId(itemId, authorId);
-        for (Booking booking : bookings) {
-            if (booking.getStatus() == BookingStatus.APPROVED && booking.getEnd().isBefore(LocalDateTime.now())) {
-                Comment comment = CommentMapper.toComment(text.trim(), author, item, LocalDateTime.now());
-                Comment createdComment = commentRepository.save(comment);
-                return CommentMapper.toCommentDto(createdComment);
-            }
-        }
-        throw new ValidationException("Предмет занят в указанные даты");
-    }*/
-
     @Transactional
     public CommentDto addComment(Long userId, Long itemId, CommentNewDto commentDto) {
         User user = findUser(userId);
