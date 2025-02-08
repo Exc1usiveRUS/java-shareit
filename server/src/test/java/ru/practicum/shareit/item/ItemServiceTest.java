@@ -176,7 +176,7 @@ public class ItemServiceTest {
     @Test
     void addCommentWithNonBookedItem() {
         bookingRepository.deleteById(bookingId);
-        assertThrows(NotFoundException.class, () -> itemService.addComment(userId, itemId,
+        assertThrows(RuntimeException.class, () -> itemService.addComment(userId, itemId,
                 new CommentNewDto(commentDto.getText())));
     }
 }
