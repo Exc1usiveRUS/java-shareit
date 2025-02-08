@@ -18,7 +18,7 @@ public class BookingClient extends BaseClient {
     private static final String API_PREFIX = "/bookings";
 
     @Autowired
-    public BookingClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder restTemplate) {
+    public BookingClient(@Value("${shareit.server.url}") String serverUrl, RestTemplateBuilder restTemplate) {
         super(restTemplate
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
                 .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
@@ -30,8 +30,7 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> patchBooking(long userId, long bookingId, boolean approved) {
-        Map<String, Object> parameters = Map.of("approved", approved);
-        return patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
+        return patch("/" + bookingId + "?approved=" + approved, userId);
     }
 
     public ResponseEntity<Object> getBookingsByBooker(long bookerId, State state, int from, int size) {

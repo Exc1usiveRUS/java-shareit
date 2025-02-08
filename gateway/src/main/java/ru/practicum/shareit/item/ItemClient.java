@@ -11,42 +11,39 @@ import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import java.util.Map;
-
 @Service
 public class ItemClient extends BaseClient {
     private static final String API_PREFIX = "/items";
 
     @Autowired
-    public ItemClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder restTemplate) {
+    public ItemClient(@Value("${shareit.server.url}") String serverUrl, RestTemplateBuilder restTemplate) {
         super(restTemplate
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
                 .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                 .build());
     }
 
-    public ResponseEntity<Object> addItem(long userId, ItemDto itemDto) {
+    public ResponseEntity<Object> addItem(Long userId, ItemDto itemDto) {
         return post("", userId, itemDto);
     }
 
-    public ResponseEntity<Object> getItem(long userId, long itemId) {
+    public ResponseEntity<Object> getItem(Long userId, Long itemId) {
         return get("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> getAllItems(long userId) {
+    public ResponseEntity<Object> getAllItems(Long userId) {
         return get("", userId);
     }
 
-    public ResponseEntity<Object> searchItems(String text, long userId) {
-        Map<String, Object> parameters = Map.of("text", text);
-        return get("?text={text}", userId, parameters);
+    public ResponseEntity<Object> searchItems(String text) {
+        return get("?text=" + text);
     }
 
-    public ResponseEntity<Object> patchItem(long userId, long itemId, ItemDto itemDto) {
+    public ResponseEntity<Object> patchItem(Long userId, Long itemId, ItemDto itemDto) {
         return patch("/" + itemId, userId, itemDto);
     }
 
-    public ResponseEntity<Object> addComment(long userId, long itemId, CommentDto commentDto) {
+    public ResponseEntity<Object> addComment(Long userId, Long itemId, CommentDto commentDto) {
         return post("/" + itemId + "/comment", userId, commentDto);
     }
 }

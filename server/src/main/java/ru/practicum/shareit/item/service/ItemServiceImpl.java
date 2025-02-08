@@ -149,13 +149,16 @@ public class ItemServiceImpl implements ItemService {
         User user = findUser(userId);
         Item item = findItem(itemId);
 
-        List<Booking> bookings = bookingRepository.findAllByItemIdAndBookerId(itemId, userId);
+        List<Booking> bookings = bookingRepository.findAllByItemIdAndBookerIdAndStatus(itemId, userId, BookingStatus.APPROVED);
+
+        if (bookings.isEmpty()) {
+            throw new NotFoundException("Не найдено подтвержденных бронирований");
+        }
 
         for (Booking booking : bookings) {
-            if (booking.getStatus() == BookingStatus.APPROVED && booking.getEnd().isBefore(LocalDateTime.now())) {
+            if (booking.getEnd().isBefore(LocalDateTime.now())) {
                 Comment comment = CommentMapper.toComment(commentDto.getText(), item, user);
-                commentRepository.save(comment);
-                return CommentMapper.toCommentDto(comment);
+                return CommentMapper.toCommentDto(commentRepository.save(comment));
             }
         }
 

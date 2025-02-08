@@ -15,18 +15,18 @@ public class UserClient extends BaseClient {
     private static final String API_PREFIX = "/users";
 
     @Autowired
-    public UserClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public UserClient(@Value("${shareit.server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
                 .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                 .build());
     }
 
-    public ResponseEntity<Object> getUser(long userId) {
+    public ResponseEntity<Object> getUser(Long userId) {
         return get("/" + userId);
     }
 
-    public ResponseEntity<Object> patchUser(UserDto userDto, long userId) {
+    public ResponseEntity<Object> patchUser(UserDto userDto, Long userId) {
         return patch("/" + userId, userDto);
     }
 
@@ -34,7 +34,7 @@ public class UserClient extends BaseClient {
         return post("", userDto);
     }
 
-    public ResponseEntity<Object> deleteUser(long userId) {
+    public ResponseEntity<Object> deleteUser(Long userId) {
         return delete("/" + userId);
     }
 }

@@ -60,9 +60,7 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBookingByBookerOrOwnerItem(@RequestHeader(name = HEADER_USER_ID) Long userId,
-                                                                 @PathVariable Long bookingId) {
+                                                                @PathVariable Long bookingId) {
         return bookingClient.getBookingByBookerOrOwnerItem(userId, bookingId);
     }
-
-
 }

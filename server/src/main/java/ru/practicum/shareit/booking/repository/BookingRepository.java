@@ -16,7 +16,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllWithIntersectionDates(Long itemId, Set<BookingStatus> statuses, LocalDateTime startDate,
                                                LocalDateTime endDate);
 
-    List<Booking> findAllByItemIdAndBookerId(Long itemId, Long bookerId);
+    List<Booking> findAllByItemIdAndBookerIdAndStatus(Long itemId, Long bookerId, BookingStatus status);
 
     List<Booking> findAllByBookerIdOrderByStartDesc(Long bookerId);
 
