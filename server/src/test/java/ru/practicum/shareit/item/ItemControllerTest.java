@@ -153,4 +153,30 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.id", is(commentDto.getId().intValue())))
                 .andExpect(jsonPath("$.text", is(commentDto.getText())));
     }
+
+    @Test
+    void deleteItem() throws Exception {
+        mvc.perform(delete("/items/{itemId}", itemId)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void searchItems() throws Exception {
+        when(itemService.searchItems(anyString())).thenReturn(List.of(itemDto));
+
+        mvc.perform(get("/items/search")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("text", "text")
+                        .param("from", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }

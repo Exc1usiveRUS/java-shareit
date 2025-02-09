@@ -82,4 +82,13 @@ public class ItemRequestServiceTest {
     void testRequestWithNotFoundException() {
         assertThrows(NotFoundException.class, () -> itemRequestService.getRequestById(userId, 99L));
     }
+
+    @Test
+    void getAllRequests() {
+        List<ItemRequestDto> itemRequests = itemRequestService.getAllRequests(userId);
+        assertNotNull(itemRequests);
+        assertEquals(1, itemRequests.size());
+        assertEquals(requestId, itemRequests.getFirst().getId());
+        assertEquals(itemRequestDto.getDescription(), itemRequests.getFirst().getDescription());
+    }
 }
