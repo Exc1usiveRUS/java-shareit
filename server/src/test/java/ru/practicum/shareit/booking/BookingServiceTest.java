@@ -337,6 +337,16 @@ public class BookingServiceTest {
     }
 
     @Test
+    void approveBookingByWrongUserId() {
+        User user2 = new User();
+        user2.setName("Name2");
+        user2.setEmail("test2@mail.ru");
+        userRepository.save(user2);
+        Long userId2 = user2.getId();
+        assertThrows(RuntimeException.class, () -> bookingService.updateBooking(userId2, bookingDto.getId(), true));
+    }
+
+    @Test
     void getByIdWithInvalidUserId() {
         BookingDto bookingDto = bookingService.createBooking(userId, bookingNewDto);
         assertThrows(NotFoundException.class, () -> bookingService.findBookingByIdAndBookerIdOrOwnerId(99L, bookingDto.getId()));
